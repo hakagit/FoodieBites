@@ -62,7 +62,7 @@ body {
 }
 
 .navbar.active {
-  max-height: 500px; /* Adjust based on number of links */
+  max-height: 500px; /* Adjust based on the number of links */
 }
 
 .navbar a,

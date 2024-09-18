@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "./Login.css";
+import "../Pages/Admin";
 
 const Login = ({ onSwitchToRegister, onClose }) => {
   const [email, setEmail] = useState("");
@@ -17,11 +18,20 @@ const Login = ({ onSwitchToRegister, onClose }) => {
         password,
       });
 
-      const { token, userId } = response.data;
+      // Extract token, user ID, and role from the response data
+      console.log("Response from API", response.data);
+
+      const { token, userId, userRole } = response.data;
       localStorage.setItem("token", token);
       localStorage.setItem("userId", userId);
+      localStorage.setItem("userRole", userRole); // Store user role
 
-      navigate("/Menu"); // Redirect after successful login
+      // Redirect based on user role
+      if (userRole === "admin") {
+        navigate("/admin"); // Redirect to admin page
+      } else {
+        navigate("/Menu"); // Redirect to menu for non-admin users
+      }
     } catch (err) {
       setError("Login failed. Please check your credentials.");
     }

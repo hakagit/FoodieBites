@@ -168,7 +168,7 @@ const Payment = () => {
           {dishes.length > 0 ? (
             dishes.map((dish) => (
               <li key={dish.id} className="dish-item">
-                {dish.name} - ${dish.price} (Quantity: {dish.quantity})
+                {dish.name} - {dish.price} (Quantity: {dish.quantity})
                 <button
                   className="remove-button"
                   onClick={() => handleRemoveDish(dish.id)}

@@ -16,6 +16,7 @@ export const Navbar = ({ onLogout }) => {
   };
 
   const isAuthenticated = !!localStorage.getItem("token"); // Check if user is authenticated
+  const userRole = localStorage.getItem("userRole"); // Get user's role
 
   return (
     <header className="header">
@@ -36,6 +37,13 @@ export const Navbar = ({ onLogout }) => {
           Order
         </Link>
 
+        {/* Conditional rendering for the admin link */}
+        {userRole === "admin" && (
+          <Link to="/admin" onClick={handleLinkClick}>
+            Admin
+          </Link>
+        )}
+
         {isAuthenticated ? (
           <div className="profile">
             <FaUserCircle size={30} title="Profile" />
@@ -50,7 +58,6 @@ export const Navbar = ({ onLogout }) => {
             </button>
           </div>
         ) : (
-          // No Login link here
           <p>You must log in to access more features.</p>
         )}
       </nav>
