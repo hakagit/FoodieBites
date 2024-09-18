@@ -1,0 +1,147 @@
+/* Order Confirmation Styles */
+.order-confirmation {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh; /* Full viewport height for centering */
+  background-color: #f0f8ff; /* Light background for a more appealing look */
+  animation: fadeIn 0.6s ease; /* Fade-in animation */
+}
+
+.confirmation-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  background-color: #fff;
+  border-radius: 12px; /* Rounded corners */
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2); /* Deeper shadow for depth */
+  max-width: 500px; /* Max width for the confirmation box */
+  margin: 0 auto;
+  transform: scale(1.05); /* Scale effect for the card */
+  transition: transform 0.2s; /* Smooth transition effect */
+}
+
+.confirmation-card:hover {
+  transform: scale(1.1); /* Scale up on hover */
+}
+
+.order-confirmation h1 {
+  font-size: 2.5rem;
+  color: #333;
+  margin-bottom: 15px;
+  text-align: center;
+  animation: slideIn 0.6s forwards; /* Slide-in animation */
+}
+
+.order-confirmation p {
+  font-size: 1.2rem;
+  color: #555;
+  text-align: center;
+  margin: 0;
+  animation: fadeIn 0.6s forwards; /* Fade-in animation */
+}
+
+/* Receipt Styles */
+.order-list {
+  list-style-type: none; /* Remove bullet points */
+  padding: 0; /* Remove padding */
+  width: 100%; /* Full width for the list */
+  margin-top: 20px; /* Space above the list */
+}
+
+.order-item {
+  padding: 10px 0; /* Space between items */
+  border-bottom: 1px solid #dddddd; /* Light border between items */
+  width: 100%; /* Ensure it occupies full width */
+  display: flex;
+  justify-content: space-between; /* Align name and price */
+}
+
+.total {
+  font-size: 1.5rem; /* Larger text for total amount */
+  font-weight: bold; /* Bold font for emphasis */
+  margin-top: 15px; /* Space above the total */
+}
+
+/* Button Styles */
+.order-confirmation button {
+  margin-top: 15px;
+  padding: 12px 25px;
+  font-size: 1.1rem;
+  color: #fff;
+  background-color: #50c878;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s; /* Smooth transitions */
+}
+
+.order-confirmation button:hover {
+  background-color: #50c878c7;
+  transform: scale(1.05); /* Scale effect on hover */
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .confirmation-card {
+    padding: 30px;
+  }
+
+  .order-confirmation h1 {
+    font-size: 2rem;
+  }
+
+  .order-confirmation p {
+    font-size: 1rem;
+  }
+
+  .order-confirmation button {
+    font-size: 0.9rem;
+  }
+
+  .total {
+    font-size: 1.3rem; /* Responsive font size for total */
+  }
+}
+
+@media (max-width: 480px) {
+  .confirmation-card {
+    padding: 20px;
+  }
+
+  .order-confirmation h1 {
+    font-size: 1.5rem;
+  }
+
+  .order-confirmation p {
+    font-size: 0.9rem;
+  }
+
+  .total {
+    font-size: 1.2rem; /* Responsive font size for total */
+  }
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}

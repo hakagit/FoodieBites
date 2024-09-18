@@ -1,0 +1,140 @@
+/* Menu.css */
+.menu {
+  padding: 8%; /* Padding around the menu */
+  background-color: #f0f8ff;
+}
+
+/* Fade-in styles */
+.fade-in {
+  opacity: 0; /* Start hidden */
+  transform: translateY(20px); /* Start slightly lower */
+  transition: opacity 0.5s ease, transform 0.5s ease; /* Smooth transition */
+}
+
+.fade-in.visible {
+  opacity: 1; /* Fully visible */
+  transform: translateY(0); /* Move to original position */
+}
+
+.dish-container-header {
+  font-family: "Poppins", sans-serif; /* Use Poppins for headings */
+  font-size: 60px; /* Heading size */
+  color: black; /* Text color */
+  text-shadow: 0 0 50px rgba(0, 0, 0, 0.8); /* Shadow effect */
+  width: 100%; /* Full width */
+  text-align: center; /* Center text */
+  margin-top: 60px; /* Space above header to push it away from the navbar */
+}
+
+.symbol {
+  display: inline-flex; /* Flexbox for icon alignment */
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  width: 4.5rem; /* Icon size */
+  height: 4.5rem; /* Icon size */
+  background: transparent; /* Transparent background */
+  border: 0.2rem solid black; /* Border style */
+  font-size: 2.5rem; /* Font size for symbols */
+  border-radius: 50%; /* Circular shape */
+  color: black; /* Symbol color */
+  transition: 0.3s ease-in-out; /* Transition for hover effect */
+}
+
+.symbol:hover {
+  transform: scale(1.3) translateY(-5px); /* Scale and lift effect */
+  box-shadow: 0 0 25px var(--main-color); /* Shadow effect on hover */
+}
+
+.menu-content {
+  display: flex; /* Flexbox for menu content */
+  align-items: center; /* Center items vertically */
+  justify-content: center; /* Center content */
+  flex-direction: column; /* Stack items vertically */
+  text-align: center; /* Center text */
+  margin-top: 3rem; /* Margin above content */
+}
+
+.menu-content h3,
+.menu-content h1 {
+  margin: 0; /* Reset margin for fade-in */
+}
+
+.menu-content h3 {
+  margin-bottom: 2rem; /* Space below subheading */
+  margin-top: 1rem; /* Space above subheading */
+  font-size: 3.5rem; /* Default subheading size */
+}
+
+.menu-content h1 {
+  font-size: 7rem; /* Default heading size */
+  font-weight: 700; /* Bold font */
+  margin-top: 1.5rem; /* Space above heading */
+  line-height: 1; /* Line height for heading */
+}
+
+.menu-content p {
+  font-size: 1.5rem; /* Default paragraph size */
+  font-weight: 500; /* Medium font weight */
+  max-width: 1000px; /* Max width for paragraphs */
+  font-family: Arial, Helvetica, sans-serif; /* Font family for paragraphs */
+  margin-top: 20px; /* Space above paragraph */
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .menu {
+    padding: 5%; /* Reduced padding for smaller screens */
+    margin-top: 50px;
+  }
+
+  .dish-container-header {
+    font-size: 50px; /* Slightly smaller header */
+    margin-top: 40px; /* Adjust spacing from the navbar */
+  }
+
+  .menu-content h1 {
+    font-size: 5rem; /* Smaller heading size */
+  }
+
+  .menu-content h3 {
+    font-size: 2.5rem; /* Smaller subheading size */
+  }
+
+  .menu-content p {
+    font-size: 1.4rem; /* Smaller paragraph size */
+  }
+
+  .symbol {
+    width: 4rem; /* Smaller symbol size */
+    height: 4rem; /* Smaller symbol size */
+    font-size: 2rem; /* Smaller font size for symbols */
+  }
+}
+
+@media (max-width: 480px) {
+  .dish-container-header {
+    font-size: 40px; /* Further reduce header size for mobile */
+    margin-top: 20px; /* Adjust spacing from the navbar */
+  }
+
+  .menu-content h1 {
+    font-size: 4rem; /* Further reduction for mobile */
+  }
+
+  .menu-content h3 {
+    font-size: 1.8rem; /* Further reduction for mobile */
+  }
+
+  .menu-content p {
+    font-size: 1.2rem; /* Further reduction for mobile */
+  }
+  .menu {
+    margin-top: 50px;
+  }
+
+  .symbol {
+    width: 3.5rem; /* Smaller symbol size for mobile */
+    height: 3.5rem; /* Smaller symbol size for mobile */
+    font-size: 1.5rem; /* Smaller font size for symbols */
+  }
+}

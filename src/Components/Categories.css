@@ -1,0 +1,58 @@
+.categories-container {
+  display: flex;
+  flex-direction: column; /* Stack items vertically */
+  align-items: center; /* Center the items */
+}
+
+.categories-grid {
+  display: flex; /* Use flexbox for layout */
+  flex-wrap: wrap; /* Allow cards to wrap on smaller screens */
+  justify-content: space-between; /* Space out the items */
+  width: 100%; /* Full width */
+  max-width: 1200px; /* Optional: limit max width */
+  margin-top: 20px; /* Space above the grid */
+  opacity: 0; /* Start hidden */
+  transform: translateY(20px); /* Start slightly lowered */
+  transition: opacity 0.5s ease, transform 0.5s ease; /* Transition for smooth appearance */
+}
+
+.categories-grid.visible {
+  opacity: 1; /* Fully visible */
+  transform: translateY(0); /* Move to original position */
+}
+
+.card {
+  flex: 1; /* Allow cards to grow */
+  margin: 0 10px; /* Side margin for spacing */
+  display: flex; /* Ensure card contents are flexible */
+  flex-direction: column; /* Stack content inside the card */
+  align-items: center; /* Center align content */
+  text-align: center; /* Center text */
+  max-width: 500px; /* Optional: set a max width for each card */
+  width: 100%;
+}
+
+/* Media Queries for Responsiveness */
+@media (max-width: 768px) {
+  .categories-grid {
+    justify-content: center; /* Center the cards on smaller screens */
+    flex-direction: column;
+  }
+
+  .card {
+    margin: 10px; /* Adjust spacing for smaller screens */
+    max-width: 100%; /* Allow cards to use full width */
+  }
+}
+
+@media (max-width: 480px) {
+  .categories-grid {
+    flex-direction: column; /* Stack cards vertically on very small screens */
+    align-items: center; /* Center align cards */
+  }
+
+  .card {
+    margin: 10px 0; /* Space between stacked cards */
+    max-width: 90%; /* Keep cards within the viewport */
+  }
+}

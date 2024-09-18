@@ -1,0 +1,107 @@
+/* Dishes.css */
+.dishes-container {
+  width: 100%; /* Full width */
+  max-width: 1200px; /* Max width for better layout */
+  padding: 30px; /* Space around the container */
+  margin: 0 auto; /* Center the container */
+  box-sizing: border-box; /* Include padding in width calculations */
+}
+
+.btn-back {
+  margin-bottom: 20px; /* Space below the button */
+  padding: 10px 15px; /* Consistent button padding */
+  background-color: #50c878; /* Main button color */
+  color: black; /* Text color */
+  border: none; /* No border */
+  border-radius: 4px; /* Rounded corners */
+  cursor: pointer; /* Pointer on hover */
+  font-size: 16px; /* Font size */
+  transition: background-color 0.3s; /* Transition for hover effect */
+}
+
+.btn-back:hover {
+  background-color: #fff; /* Change background on hover */
+}
+
+.dishes-h2 {
+  text-align: center; /* Center align heading */
+  margin-bottom: 30px; /* Consistent spacing */
+  font-size: 24px; /* Increased font size */
+}
+
+.dishes-grid {
+  display: flex; /* Flexbox for layout */
+  flex-wrap: wrap; /* Allow wrapping for smaller screens */
+  justify-content: center; /* Center the items in the row */
+  gap: 40px; /* Space between dishes */
+  margin-top: 20px; /* Space above the grid */
+}
+
+/* Order controls and quantity controls */
+.order-controls {
+  margin-top: 20px;
+  text-align: center; /* Center align order controls */
+}
+
+.quantity-controls {
+  display: flex; /* Flex for layout */
+  justify-content: center; /* Center controls */
+  gap: 10px; /* Space between quantity items */
+  margin-bottom: 20px; /* Space below quantity controls */
+}
+
+.quantity-item {
+  display: flex; /* Flex for layout */
+  align-items: center; /* Center items vertically */
+  gap: 5px; /* Space between buttons */
+}
+
+.btn-order {
+  padding: 12px 20px; /* Consistent button size */
+  background-color: #50c878; /* Main button color */
+  color: black; /* Text color */
+  border: none; /* No border */
+  border-radius: 4px; /* Rounded corners */
+  cursor: pointer; /* Pointer on hover */
+  font-size: 16px; /* Font size */
+  transition: background-color 0.3s; /* Transition for hover */
+}
+
+.btn-order:hover {
+  background-color: #fff; /* Change background on hover */
+}
+
+/* Media Queries for Responsiveness */
+@media (max-width: 768px) {
+  .dishes-h2 {
+    font-size: 20px; /* Reduce heading size on tablets */
+  }
+
+  .dishes-grid {
+    flex-direction: column; /* Change to column layout on tablet screens */
+    gap: 20px; /* Smaller gap for column layout */
+  }
+
+  .btn-back,
+  .btn-order {
+    padding: 8px 12px; /* Adjust button size for smaller screens */
+    font-size: 14px; /* Decrease button font size */
+  }
+}
+
+@media (max-width: 480px) {
+  .dishes-h2 {
+    font-size: 18px; /* Further reduce heading size on mobile */
+    margin-bottom: 20px; /* Less spacing on smaller screens */
+  }
+
+  .quantity-controls {
+    flex-direction: column; /* Stack quantity controls vertically */
+    gap: 5px; /* Space for vertical layout */
+  }
+
+  .dishes-grid {
+    justify-content: center; /* Center items on mobile */
+    gap: 15px; /* Reduce gap for mobile */
+  }
+}
