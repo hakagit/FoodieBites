@@ -1,0 +1,232 @@
+/* Section Styles */
+section {
+  min-height: 100vh; /* Minimum height of section */
+  padding: 10rem 9%; /* Padding for desktop */
+}
+
+.home {
+  display: flex; /* Flexbox for layout */
+  justify-content: center; /* Center content */
+  align-items: center; /* Center items vertically */
+  flex-direction: column; /* Stack items vertically */
+  gap: 1rem; /* Space between items */
+  background-color: #f0f8ff;
+}
+
+.home-content {
+  display: flex; /* Flexbox for inner content */
+  align-items: center; /* Center items vertically */
+  justify-content: center; /* Center content */
+  flex-direction: column; /* Stack items vertically */
+  text-align: center; /* Center text */
+  margin-top: 3rem; /* Margin on top */
+}
+
+span {
+  color: var(--main-color); /* Color for spans */
+}
+
+.logo span {
+  color: var(--main-color); /* Color for logo spans */
+}
+
+.home-content h3 {
+  margin-bottom: 2rem; /* Space below subheading */
+  margin-top: 1rem; /* Space above subheading */
+  font-size: 3.5rem; /* Default font size */
+}
+
+.home-content h1 {
+  font-size: 7rem; /* Default heading size */
+  font-weight: 700; /* Bold font */
+  margin-top: 1.5rem; /* Space above heading */
+  line-height: 1; /* Line height */
+}
+
+.home-content p {
+  font-size: 1.5rem; /* Default paragraph size */
+  font-weight: 500; /* Font weight */
+  max-width: 1000px; /* Max width for paragraph */
+  font-family: Arial, Helvetica, sans-serif; /* Font family */
+}
+
+.social-icons {
+  display: flex; /* Flexbox layout for icons */
+  justify-content: center; /* Center the icons */
+  margin: 3rem 0; /* Space above and below icons */
+}
+
+.social-icons a {
+  display: inline-flex; /* Inline flex for icon links */
+  justify-content: center; /* Center items */
+  align-items: center; /* Center vertically */
+  width: 4.5rem; /* Width of icon */
+  height: 4.5rem; /* Height of icon */
+  background: transparent; /* Transparent background */
+  border: 0.2rem solid var(--main-color); /* Border style */
+  font-size: 2.5rem; /* Font size */
+  border-radius: 50%; /* Circle shape */
+  color: var(--main-color); /* Icon color */
+  margin: 0 1.5rem; /* Margin for spacing */
+  transition: 0.3s ease-in-out; /* Transition effect */
+}
+
+.social-icons a:hover {
+  color: white; /* Color on hover */
+  transform: scale(1.3) translateY(-5px); /* Hover effect */
+  box-shadow: 0 0 25px var(--main-color); /* Shadow on hover */
+  background-color: var(--main-color); /* Background color on hover */
+}
+
+.btn {
+  display: inline-block; /* Inline block for button */
+  padding: 1rem 2.8rem; /* Padding for button */
+  background: var(--main-color) !important; /* Background color */
+  border-radius: 4rem; /* Rounded corners */
+  font-size: 1.6rem; /* Default button font size */
+  font-family: Arial, Helvetica, sans-serif; /* Font family */
+  color: white; /* Button text color */
+  border: 2px solid transparent; /* No border */
+  letter-spacing: 0.1rem; /* Letter spacing */
+  font-weight: 600; /* Font weight */
+  transition: 0.3s ease-in-out; /* Transition effect */
+  cursor: pointer; /* Pointer cursor */
+}
+
+.btn:hover {
+  transform: scale(1.05); /* Scale effect on hover */
+  box-shadow: 0 0 25px var(--main-color); /* Shadow effect */
+}
+
+.text-animation {
+  font-size: 34px; /* Base font size for animation */
+  font-weight: 600; /* Font weight */
+  min-width: 280px; /* Minimum width */
+}
+
+.text-animation span {
+  position: relative; /* Position relative for animation */
+}
+
+.text-animation span::before {
+  content: "Web Developer"; /* Content for animation */
+  color: var(--main-color); /* Text color */
+  animation: words 20s infinite; /* Infinite animation */
+}
+
+.text-animation span::after {
+  content: ""; /* Empty content */
+  background-color: #f0f8ff; /* Background color */
+  position: absolute; /* Absolute positioning */
+  width: calc(100% + 8px); /* Width calculation */
+  height: 100%; /* Full height */
+  border-left: 3px solid var(--bg-color); /* Left border */
+  right: -8px; /* Position adjustment */
+  animation: cursor 0.6s infinite, typing 20s steps(14) infinite; /* Animation */
+}
+
+/* Keyframes */
+@keyframes cursor {
+  to {
+    border-left: 2px solid var(--main-color); /* Cursor effect */
+  }
+}
+
+@keyframes words {
+  0%,
+  40% {
+    content: "Pizza"; /* Shows "Pizza" */
+  }
+  61%,
+  80% {
+    content: "Pasta"; /* Shows "Pasta" */
+  }
+  81%,
+  100% {
+    content: "Burgers"; /* Shows "Burgers" */
+  }
+}
+
+@keyframes typing {
+  10%,
+  15%,
+  30%,
+  35%,
+  50%,
+  55%,
+  70%,
+  75%,
+  90%,
+  95% {
+    width: 0; /* Typing effect */
+  }
+  5%,
+  20%,
+  25%,
+  40%,
+  45%,
+  60%,
+  65%,
+  80%,
+  85% {
+    width: calc(100% + 8px); /* Full width typing */
+  }
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  section {
+    padding: 5rem 5%; /* Reduced padding for smaller screens */
+  }
+
+  .home-content h1 {
+    font-size: 5rem; /* Smaller heading size */
+  }
+
+  .home-content h3 {
+    font-size: 2.5rem; /* Smaller subheading size */
+  }
+
+  .home-content p {
+    font-size: 1.2rem; /* Smaller paragraph size */
+  }
+
+  .social-icons a {
+    width: 4rem; /* Smaller social icon width */
+    height: 4rem; /* Smaller social icon height */
+    font-size: 2rem; /* Smaller icon font size */
+  }
+
+  .btn {
+    font-size: 1.4rem; /* Smaller button text */
+    padding: 0.8rem 2.4rem; /* Adjusted button padding */
+  }
+
+  .text-animation {
+    font-size: 28px; /* Smaller text size for animation */
+  }
+}
+
+@media (max-width: 480px) {
+  .home-content h1 {
+    font-size: 4rem; /* Further reduction for mobile */
+  }
+
+  .home-content h3 {
+    font-size: 2rem; /* Further reduction for mobile */
+  }
+
+  .home-content p {
+    font-size: 1rem; /* Further reduction for mobile */
+  }
+
+  .btn {
+    font-size: 1.2rem; /* Further reduction for mobile */
+    padding: 0.6rem 2rem; /* Further adjusted padding */
+  }
+
+  .social-icons a {
+    width: 3.5rem; /* Smaller icon size for mobile */
+    height: 3.5rem; /* Smaller icon size for mobile */
+  }
+}

@@ -1,0 +1,30 @@
+/* Main Section Styles */
+.main {
+  padding: 0 10px; /* Horizontal padding */
+  width: 100%; /* Full width */
+  box-sizing: border-box; /* Ensures padding is included in width */
+}
+.main-container {
+  background-color: #f0f8ff;
+}
+.order-h1 {
+  color: var(--main-color); /* Main color for the text */
+  text-shadow: 0 0 50px rgba(255, 255, 255, 0.5); /* Softer text shadow for legibility */
+  font-size: 40px; /* Default font size */
+  text-align: center; /* Center the heading */
+  margin: 20px 0; /* Margin above and below the heading */
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .order-h1 {
+    font-size: 32px; /* Smaller font size for tablets */
+  }
+}
+
+@media (max-width: 480px) {
+  .order-h1 {
+    font-size: 28px; /* Further reduction for mobile */
+    margin: 15px 0; /* Adjust margin for mobile */
+  }
+}

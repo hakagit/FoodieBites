@@ -1,0 +1,29 @@
+* {
+  margin: 0;
+  padding: 0%;
+  scroll-behavior: smooth;
+}
+:root {
+  --bg-color: #111111;
+  --second-bg-color: #151515;
+  --text-color: white;
+  --main-color: #50c878;
+}
+/* Add this to your CSS file */
+.fade-enter {
+  opacity: 0;
+}
+
+.fade-enter-active {
+  opacity: 1;
+  transition: opacity 0.5s ease-in;
+}
+
+.fade-exit {
+  opacity: 1;
+}
+
+.fade-exit-active {
+  opacity: 0;
+  transition: opacity 0.5s ease-in;
+}

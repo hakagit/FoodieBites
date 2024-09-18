@@ -1,0 +1,158 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  text-decoration: none;
+  border: none;
+  outline: none;
+  scroll-behavior: smooth;
+  font-family: "Poppins", sans-serif; /* Global font family */
+}
+
+:root {
+  --bg-color: #ffffff; /* Background color */
+  --text-color: black; /* Text color */
+  --main-color: #50c878; /* Primary action color */
+}
+
+html {
+  font-size: 62.5%; /* Base font size for rem units */
+  overflow-x: hidden; /* Prevent horizontal scrollbar */
+}
+
+body {
+  background: var(--bg-color); /* Set background */
+  color: var(--text-color); /* Set text color */
+}
+
+.header {
+  position: fixed; /* Fixed position for sticky header */
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 3rem 9%; /* Responsive padding */
+  background: rgba(0, 0, 0, 0.2); /* Semi-transparent background */
+  backdrop-filter: blur(10px); /* Background blur effect */
+  display: flex; /* Flex layout */
+  justify-content: space-between; /* Space between logo and navbar */
+  align-items: center; /* Center align items vertically */
+  z-index: 100; /* Overlap other content */
+}
+
+.logo {
+  font-size: 3rem; /* Default logo size */
+  color: var(--text-color); /* Logo text color */
+  font-weight: 800; /* Bold font */
+  cursor: pointer; /* Pointer on hover */
+  transition: 0.3s ease-in-out; /* Smooth transition */
+}
+
+.logo:hover {
+  transform: scale(1.1); /* Grow effect on hover */
+}
+
+.navbar {
+  display: flex; /* Flex layout */
+  justify-content: center; /* Center align navbar items */
+  align-items: center; /* Center vertically */
+  gap: 30px; /* Space between navbar items */
+  transition: max-height 0.3s ease-in-out; /* Smooth transition */
+  overflow: hidden; /* Hide overflow */
+  max-height: none; /* Open by default on wider screens */
+}
+
+.navbar.active {
+  max-height: 500px; /* Adjust based on number of links */
+}
+
+.navbar a,
+.logout {
+  position: relative; /* Relative positioning */
+  font-size: 2rem; /* Default font size for links */
+  color: black; /* Default link color */
+  margin: 0 2rem; /* Margin for spacing */
+  font-weight: 500; /* Medium font weight */
+  transition: 0.3s ease-in-out; /* Smooth transition */
+  padding: 1rem; /* Padding for better click area */
+}
+
+.navbar a:hover,
+.logout:hover {
+  color: var(--main-color); /* Change color on hover */
+}
+
+.profile {
+  display: flex; /* Flex layout */
+  align-items: center; /* Center align profile items */
+}
+
+.logout {
+  background: transparent; /* No background */
+  border: none; /* No border */
+  font-size: 1.5rem; /* Font size for logout */
+  color: var(--main-color); /* Logout color */
+  cursor: pointer; /* Pointer on hover */
+  margin-left: 10px; /* Space from profile icon */
+}
+
+#menu-icon {
+  font-size: 3.6rem; /* Menu icon size */
+  color: var(--main-color); /* Menu icon color */
+  display: none; /* Hidden by default */
+}
+
+span {
+  color: var(--main-color); /* Span text color */
+}
+
+.logo span {
+  color: var(--main-color); /* Color for logo span */
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  html {
+    font-size: 55%; /* Reduce base font size */
+  }
+
+  .header {
+    padding: 2rem 5%; /* Less padding on smaller screens */
+    flex-direction: column; /* Stack items vertically */
+  }
+
+  .logo {
+    font-size: 2.5rem; /* Smaller logo size */
+  }
+
+  .navbar {
+    flex-direction: column; /* Vertical stacking */
+    width: 100%; /* Full width */
+    max-height: 0; /* Initially hidden */
+    border: none; /* No border */
+    align-items: flex-start; /* Align left */
+  }
+
+  .navbar a {
+    font-size: 1.5rem; /* Smaller link font size */
+    margin: 1rem 0; /* Margin for vertical spacing */
+    text-align: left; /* Align links to the left */
+  }
+
+  #menu-icon {
+    display: block; /* Show menu icon on smaller screens */
+  }
+
+  .navbar.active {
+    max-height: 500px; /* Expand when active */
+  }
+}
+
+@media (max-width: 480px) {
+  .logo {
+    font-size: 2rem; /* Further reduce logo size */
+  }
+
+  .navbar a {
+    font-size: 1.4rem; /* Further reduce link font size */
+  }
+}

@@ -1,0 +1,100 @@
+/* Payment Container Styles */
+.payment-container {
+  display: flex; /* Flexbox layout for two columns */
+  justify-content: space-between; /* Space between columns */
+  max-width: 1000px; /* Increased width for better layout */
+  margin: 160px auto; /* Center the container with top margin */
+  padding: 30px; /* Increased padding around the container */
+  border: 1px solid #ccc; /* Border for the container */
+  border-radius: 12px; /* Rounded corners */
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15); /* Deeper shadow for more depth */
+  background-color: #f9f9f9; /* Light background color */
+  transition: all 0.3s ease; /* Smooth transition for interactive changes */
+}
+
+.confirmation-section,
+.payment-section {
+  width: 48%; /* Each section takes up 48% of the container for more space */
+  padding: 20px; /* Increased padding for both sections */
+}
+
+.confirmation-section {
+  padding-right: 30px; /* Right padding for spacing */
+  border-right: 1px solid #ccc; /* Optional divider */
+}
+
+.payment-section {
+  padding-left: 30px; /* Left padding for spacing */
+}
+
+/* Heading Styles */
+h2 {
+  text-align: center; /* Center align headings */
+  margin-bottom: 30px; /* Increased space below the heading */
+  color: #333; /* Dark text color */
+  font-size: 1.8rem; /* Increased font size for headings */
+}
+
+/* Dish Item Styles */
+.dish-item {
+  display: flex; /* Flexbox for item layout */
+  justify-content: space-between; /* Space between item and details */
+  align-items: center; /* Center items vertically */
+  padding: 15px 0; /* Increased padding for dish items */
+  border-bottom: 1px solid #ccc; /* Bottom border for separation */
+}
+
+/* Remove Button Styles */
+.remove-button {
+  background-color: #ff4d4d; /* Initial background color */
+  color: white; /* Text color */
+  border: none; /* No border */
+  padding: 10px 15px; /* Increased button padding */
+  cursor: pointer; /* Pointer cursor on hover */
+  border-radius: 8px; /* Rounded corners */
+  font-size: 1rem; /* Increased font size */
+  transition: background-color 0.3s ease; /* Smooth transition for hover */
+}
+
+.remove-button:hover {
+  background-color: #ff1a1a; /* Darker red on hover */
+}
+
+/* Input Group Styles */
+.input-group {
+  display: flex; /* Flexbox for label and input arrangement */
+  align-items: center; /* Center align items vertically */
+  margin-bottom: 20px; /* Increased space below the input group */
+}
+
+.label {
+  margin-right: 15px; /* Space between label and input */
+  font-weight: bold; /* Bold label for emphasis */
+  font-size: 1.1rem; /* Increased font size for labels */
+}
+
+.user-name {
+  margin: 0; /* Remove default margin */
+  font-size: 1rem; /* Optionally increase the input text size */
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .payment-container {
+    flex-direction: column; /* Stack sections vertically for smaller screens */
+    max-width: 90%; /* Allow the container to be wider on small screens */
+    margin: 160px auto 20px; /* Top margin and small bottom margin */
+    padding: 20px; /* Adjusted padding for responsiveness */
+  }
+
+  .confirmation-section,
+  .payment-section {
+    width: 100%; /* Full width for smaller screens */
+    padding: 15px; /* Slight padding adjustment */
+    border-right: none; /* Remove divider on mobile */
+  }
+
+  .confirmation-section {
+    border-bottom: 1px solid #ccc; /* Add bottom border for separation on mobile */
+  }
+}

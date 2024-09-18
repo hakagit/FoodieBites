@@ -1,0 +1,68 @@
+.card {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  cursor: pointer;
+  overflow: hidden; /* Prevent overflow */
+  transition: transform 0.2s; /* Animation for hover */
+  width: 100%; /* Use full width for responsive layout */
+  max-width: 250px; /* Limit maximum width */
+  margin: 10px; /* Space between cards */
+}
+
+.card:hover {
+  transform: scale(1.05); /* Scale effect on hover */
+}
+
+.card-image {
+  width: 100%; /* Full width of the card */
+  height: auto; /* Allow height to adjust for responsiveness */
+  aspect-ratio: 16 / 9; /* Maintain aspect ratio while responsive */
+  object-fit: cover; /* Cover the area while maintaining aspect ratio */
+}
+
+.card-content {
+  padding: 16px; /* Space around content */
+}
+
+.card-title {
+  font-size: 1.5rem; /* Title size */
+  margin: 0; /* Remove default margin */
+  color: #333; /* Title color */
+}
+
+.card-description {
+  font-size: 1rem; /* Description size */
+  color: #666; /* Description color */
+}
+
+/* Media Queries for Responsive Design */
+@media (max-width: 768px) {
+  .card {
+    max-width: 200px; /* Adjust max-width for tablets */
+  }
+
+  .card-title {
+    font-size: 1.25rem; /* Adjust title size for smaller screens */
+  }
+
+  .card-description {
+    font-size: 0.9rem; /* Adjust description size for smaller screens */
+  }
+}
+
+@media (max-width: 480px) {
+  .card {
+    max-width: 100%; /* Full width on mobile devices */
+    margin: 5px; /* Reduced margin on small screens */
+  }
+
+  .card-title {
+    font-size: 1.2rem; /* Further adjust title size for smaller screens */
+  }
+
+  .card-description {
+    font-size: 0.8rem; /* Further adjust description size for smaller screens */
+  }
+}

@@ -1,0 +1,139 @@
+/* Login.css */
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap");
+
+body {
+  font-family: "Poppins", sans-serif; /* Apply Poppins font globally */
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* Ensure it's above other content */
+  backdrop-filter: blur(5px); /* Blur effect for background */
+}
+
+.login-container {
+  background: #262525;
+  padding: 3rem; /* Padding around the form */
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  width: 100%; /* Full width of the parent */
+  max-width: 400px; /* Max width for larger screens */
+}
+
+.login-form h2 {
+  margin-bottom: 20px;
+  text-align: center;
+  color: #fff; /* White text for header */
+}
+
+.login-form input {
+  height: 50px;
+  width: 100%; /* Full width of the container */
+  padding: 0 15px;
+  font-size: 16px; /* Base font size */
+  margin-bottom: 15px; /* Space between inputs */
+  border: 1px solid #ddd; /* Light grey border */
+  border-radius: 6px; /* Rounded corners */
+  outline: none;
+  transition: border-color 0.3s; /* Smooth transition for focus */
+}
+
+.login-form input:focus {
+  border-color: #50c878; /* Change border color on focus */
+}
+
+.login-form .button {
+  color: #fff;
+  background: #50c878; /* Button color */
+  font-size: 1.2rem; /* Base button font size */
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s; /* Smooth background color transition */
+}
+
+.login-form .button:hover {
+  background: #50c878dc; /* Darker shade on hover */
+}
+
+.error-message {
+  color: red;
+  text-align: center; /* Center error message */
+  margin-bottom: 15px; /* Space below error message */
+}
+
+.register-link {
+  margin-top: 20px; /* Space above link */
+}
+
+.centered-button-container {
+  display: flex; /* Use flexbox for centering */
+  justify-content: center; /* Center horizontally */
+  margin-top: 20px; /* Space above the button */
+}
+
+.hide-button {
+  background-color: #50c878; /* Button primary color */
+  color: white; /* Button text color */
+  border: none; /* No border */
+  border-radius: 5px; /* Rounded corners */
+  padding: 10px 20px; /* Padding for better appearance */
+  font-size: 16px; /* Base font size */
+  cursor: pointer; /* Pointer cursor on hover */
+  transition: background-color 0.3s ease; /* Smooth background color transition */
+  display: inline-block; /* Allow centering within containers */
+}
+
+/* Hover effect for hide button */
+.hide-button:hover {
+  background-color: #50c878ab; /* Darker shade on hover */
+}
+
+/* Responsive Styles */
+@media (max-width: 600px) {
+  .login-container {
+    padding: 1.5rem; /* Reduced padding for smaller screens */
+  }
+
+  .login-form h2 {
+    font-size: 1.5rem; /* Smaller font for headings */
+  }
+
+  .login-form input {
+    font-size: 14px; /* Smaller font for inputs */
+  }
+
+  .login-form .button {
+    font-size: 1rem; /* Smaller button font */
+  }
+
+  .hide-button {
+    font-size: 14px; /* Smaller hide button */
+  }
+}
+
+@media (max-width: 480px) {
+  .login-container {
+    padding: 1rem; /* Further reduced padding for mobile devices */
+    max-width: 90%; /* Allow the container to take more width */
+  }
+
+  .login-form h2 {
+    font-size: 1.4rem; /* Further reduce heading size */
+  }
+
+  .login-form input {
+    font-size: 13px; /* Smaller font for mobile input fields */
+    height: 45px; /* Slightly smaller input height */
+  }
+
+  .login-form .button {
+    font-size: 0.9rem; /* Smaller button font size */
+  }
+}
