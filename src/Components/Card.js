@@ -8,7 +8,6 @@ const Card = ({ title, description, image, onClick }) => {
       <div className="card-content">
         <h2 className="card-title">{title}</h2>
         <p className="card-description">{description}</p>
-        Fouad
       </div>
     </div>
   );
