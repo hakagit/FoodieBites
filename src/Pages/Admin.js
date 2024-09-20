@@ -255,10 +255,14 @@ const AdminPage = () => {
   };
 
   // Add a new inventory item
-
   const handleAddInventory = async () => {
+    console.log("Add Inventory Button Clicked");
+
     const token = localStorage.getItem("token");
     const userId = localStorage.getItem("userId");
+
+    console.log("New Inventory Data: ", newInventory);
+    console.log("Selected Supplier:", selectedSupplier); // Ensure this has the right structure
 
     if (
       !newInventory.name.trim() ||
@@ -266,6 +270,7 @@ const AdminPage = () => {
       !newInventory.expiry ||
       !selectedSupplier
     ) {
+      console.log("Validation failed: missing required fields.");
       setError(
         "Inventory name, quantity, expiry date, and supplier must be specified."
       );
@@ -277,7 +282,6 @@ const AdminPage = () => {
       quantity: newInventory.quantity,
       expiry: newInventory.expiry,
       user_id: userId,
-      supplier_id: selectedSupplier.value, // Attach the selected supplier ID
     };
 
     try {
@@ -291,14 +295,26 @@ const AdminPage = () => {
         body: JSON.stringify(requestBody),
       });
 
+      const responseData = await response.json();
+      console.log("API Response:", responseData);
+
       if (response.ok) {
-        const inventoryData = await response.json();
-        // Attach the supplier to the inventory
-        await attachSupplierToInventory(
-          inventoryData.id,
-          selectedSupplier.value
-        );
-        fetchInventoryItems();
+        const inventoryId =
+          responseData.id || responseData.data?.id || responseData.inventoryId;
+        console.log("Inventory ID:", inventoryId);
+
+        if (!inventoryId) {
+          throw new Error("Inventory ID is not returned");
+        }
+
+        // Ensure the selected supplier value is correct
+        const supplierId = selectedSupplier.value; // Ensure this has the right format
+        console.log("Attaching Supplier ID:", supplierId);
+
+        // Attach the supplier to the newly created inventory
+        await attachSupplierToInventory(inventoryId, supplierId);
+
+        fetchInventoryItems(); // Refresh inventory items after successful addition
         setNewInventory({ name: "", quantity: 1, expiry: "" });
         setSelectedSupplier(null); // Reset selected supplier
       } else {
@@ -306,12 +322,19 @@ const AdminPage = () => {
         throw new Error(`Failed to create inventory item: ${responseText}`);
       }
     } catch (error) {
-      setError("Could not add inventory item, please try again.");
+      console.error("Error in adding inventory or attaching supplier:", error);
+      setError(
+        "Could not add inventory item and attach supplier, please try again."
+      );
     }
   };
+
   // Function to attach supplier to inventory
   const attachSupplierToInventory = async (inventoryId, supplierId) => {
     const token = localStorage.getItem("token");
+
+    // Ensure supplierId is logged for debugging
+    console.log("Attaching Supplier ID:", supplierId);
 
     try {
       const response = await fetch(
@@ -323,17 +346,132 @@ const AdminPage = () => {
             Authorization: `Bearer ${token}`,
             Accept: "application/json",
           },
-          body: JSON.stringify({ supplier_id: supplierId }),
+          body: JSON.stringify({ supplier_ids: [supplierId] }), // Adjust this based on API requirements
         }
       );
 
       if (!response.ok) {
-        throw new Error("Failed to attach supplier to inventory.");
+        const errorText = await response.text();
+        console.error("Failed to attach supplier:", errorText); // Log error response
+        throw new Error(`Failed to attach supplier: ${errorText}`);
       }
+
+      console.log("Supplier attached successfully!");
     } catch (error) {
-      setError("Could not attach supplier to inventory, please try again.");
+      console.error("Error attaching supplier to inventory:", error);
+      throw error; // Rethrow to handle further up in the call chain
     }
   };
+
+  // Function to delete inventory item
+  const handleDeleteInventory = async (id) => {
+    try {
+      // First, get supplier IDs associated with the inventory to detach
+      const supplierIds = await getSupplierIdsForInventory(id);
+      if (supplierIds.length > 0) {
+        await detachSupplierFromInventory(id, supplierIds); // Detach suppliers if any exist
+      } else {
+        console.warn("No Supplier IDs found for detachment.");
+      }
+
+      const token = localStorage.getItem("token");
+      const response = await fetch(`${BASE_URL}/inventory/destroy/${id}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: "application/json",
+        },
+      });
+
+      if (response.ok) {
+        fetchInventoryItems(); // Refresh inventory after deletion
+      } else {
+        throw new Error("Failed to delete inventory item");
+      }
+    } catch (error) {
+      setError("Could not delete inventory item, please try again.");
+      console.error("Error when deleting inventory:", error);
+    }
+  };
+
+  // Function to detach supplier from inventory
+  const detachSupplierFromInventory = async (inventoryId, supplierIds) => {
+    const token = localStorage.getItem("token");
+
+    if (!supplierIds || supplierIds.length === 0) {
+      console.warn("No Supplier IDs provided for detachment.");
+      return; // Exit if no supplier IDs are available
+    }
+
+    const body = JSON.stringify({ supplier_ids: supplierIds });
+
+    try {
+      const response = await fetch(
+        `${BASE_URL}/inventory_supplier/inventories/${inventoryId}/suppliers`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+            Accept: "application/json",
+          },
+          body: body,
+        }
+      );
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(
+          `Failed to detach supplier from inventory: ${errorText}`
+        );
+      }
+
+      console.log("Suppliers detached successfully!");
+    } catch (error) {
+      setError("Could not detach supplier from inventory, please try again.");
+      console.error("Error in detaching suppliers from inventory:", error);
+    }
+  };
+
+  // Function to get supplier IDs for a specific inventory
+  // Function to get supplier IDs for a specific inventory item
+  const getSupplierIdsForInventory = async (inventoryId) => {
+    const token = localStorage.getItem("token");
+
+    try {
+      const response = await fetch(
+        `${BASE_URL}/inventory_supplier/inventories/${inventoryId}/suppliers`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: "application/json",
+          },
+        }
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+
+        // Check the structure of your data
+        if (data && data.data && Array.isArray(data.data)) {
+          // Assuming each entry contains a supplier object with an id
+          return data.data.map((supplier) => supplier.id); // Ensure this matches your API's response structure
+        } else {
+          console.warn("No suppliers returned in response data:", data);
+          return []; // Return empty if the expected structure is not found
+        }
+      } else {
+        const errorText = await response.text();
+        console.error("Failed to fetch supplier IDs:", errorText);
+        return []; // Log error and return empty array on failed response
+      }
+    } catch (error) {
+      console.error("Error fetching supplier IDs:", error);
+      return []; // Return empty array on error catching
+    }
+  };
+
   const handleDeleteCategory = async (id) => {
     try {
       const token = localStorage.getItem("token");
@@ -397,52 +535,6 @@ const AdminPage = () => {
     }
   };
 
-  const handleDeleteInventory = async (id) => {
-    try {
-      const token = localStorage.getItem("token");
-      // First, detach the supplier from the inventory
-      await detachSupplierFromInventory(id);
-      const response = await fetch(`${BASE_URL}/inventory/destroy/${id}`, {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          Accept: "application/json",
-        },
-      });
-
-      if (response.ok) {
-        fetchInventoryItems();
-      } else {
-        throw new Error("Failed to delete inventory item");
-      }
-    } catch (error) {
-      setError("Could not delete inventory item, please try again.");
-    }
-  };
-  // Function to detach supplier from inventory
-  const detachSupplierFromInventory = async (inventoryId) => {
-    const token = localStorage.getItem("token");
-
-    try {
-      const response = await fetch(
-        `${BASE_URL}/inventory_supplier/inventories/${inventoryId}/suppliers`,
-        {
-          method: "DELETE",
-          headers: {
-            Authorization: `Bearer ${token}`,
-            Accept: "application/json",
-          },
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error("Failed to detach supplier from inventory.");
-      }
-    } catch (error) {
-      setError("Could not detach supplier from inventory, please try again.");
-    }
-  };
-
   const renderActiveSection = () => {
     switch (activeSection) {
       case "categories":
@@ -487,7 +579,6 @@ const AdminPage = () => {
               {dishes.map((dish) => (
                 <li key={dish.id}>
                   {dish.name} (Category: {dish.category.name}){" "}
-                  {/* Display the category name */}
                   <button onClick={() => handleDeleteDish(dish.id)}>
                     Delete
                   </button>

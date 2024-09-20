@@ -33,8 +33,8 @@ export const Navbar = ({ onLogout }) => {
         <Link to="/Menu" onClick={handleLinkClick}>
           Menu
         </Link>
-        <Link to="/Order" onClick={handleLinkClick}>
-          Order
+        <Link to="/Gallery" onClick={handleLinkClick}>
+          Gallery
         </Link>
 
         {/* Conditional rendering for the admin link */}

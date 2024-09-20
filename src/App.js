@@ -10,6 +10,7 @@ import { Order } from "./Pages/Order";
 import Payment from "./Pages/Payment";
 import OrderConfirmation from "./Pages/OrderConfirmation";
 import Admin from "./Pages/Admin"; // Import the Admin page
+import { Gallery } from "./Pages/Gallery";
 
 const PrivateRoute = ({ element }) => {
   const isAuthenticated = !!localStorage.getItem("token");
@@ -53,7 +54,10 @@ function App() {
           element={<Home onLogin={() => setIsAuthenticated(true)} />}
         />
         <Route path="/Menu" element={<PrivateRoute element={<Menu />} />} />
-        <Route path="/Order" element={<PrivateRoute element={<Order />} />} />
+        <Route
+          path="/Gallery"
+          element={<PrivateRoute element={<Gallery />} />}
+        />
         <Route
           path="/Payment/:order_id"
           element={<PrivateRoute element={<Payment />} />}
