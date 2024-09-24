@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./Admin.css"; // Ensure your CSS file is linked for styles
-import Select from "react-select"; // Import react-select
+import Select from "react-select";
 
 const AdminPage = () => {
   const [categories, setCategories] = useState([]);
@@ -8,7 +8,10 @@ const AdminPage = () => {
   const [suppliers, setSuppliers] = useState([]);
   const [inventoryItems, setInventoryItems] = useState([]);
   const [newCategory, setNewCategory] = useState("");
+  const [newCategoryImage, setNewCategoryImage] = useState(null);
   const [newCategoryQuantity, setNewCategoryQuantity] = useState(1);
+  const [updatedCategoryName, setUpdatedCategoryName] = useState("");
+  const [updatedCategoryImage, setUpdatedCategoryImage] = useState(null);
   const [newDish, setNewDish] = useState({
     name: "",
     categoryId: "",
@@ -21,9 +24,10 @@ const AdminPage = () => {
     quantity: 1,
     expiry: "",
   });
-  const [selectedSupplier, setSelectedSupplier] = useState(null); // State for selected supplier
+  const [selectedSupplier, setSelectedSupplier] = useState(null);
   const [error, setError] = useState("");
-  const [activeSection, setActiveSection] = useState("categories"); // State to control active section
+  const [activeSection, setActiveSection] = useState("categories");
+  const [selectedCategory, setSelectedCategory] = useState(null);
 
   const BASE_URL = "http://localhost:8000/api";
 
@@ -34,7 +38,6 @@ const AdminPage = () => {
     fetchInventoryItems();
   }, []);
 
-  // Fetch existing categories from the API
   const fetchCategories = async () => {
     try {
       const token = localStorage.getItem("token");
@@ -47,11 +50,7 @@ const AdminPage = () => {
 
       if (response.ok) {
         const result = await response.json();
-        if (Array.isArray(result.data)) {
-          setCategories(result.data);
-        } else {
-          setCategories([]);
-        }
+        setCategories(Array.isArray(result.data) ? result.data : []);
       } else {
         throw new Error("Failed to fetch categories");
       }
@@ -60,7 +59,6 @@ const AdminPage = () => {
     }
   };
 
-  // Fetch existing dishes from the API
   const fetchDishes = async () => {
     try {
       const token = localStorage.getItem("token");
@@ -73,11 +71,7 @@ const AdminPage = () => {
 
       if (response.ok) {
         const result = await response.json();
-        if (Array.isArray(result.data)) {
-          setDishes(result.data);
-        } else {
-          setDishes([]);
-        }
+        setDishes(Array.isArray(result.data) ? result.data : []);
       } else {
         throw new Error("Failed to fetch dishes");
       }
@@ -86,7 +80,6 @@ const AdminPage = () => {
     }
   };
 
-  // Fetch existing suppliers from the API
   const fetchSuppliers = async () => {
     try {
       const token = localStorage.getItem("token");
@@ -99,11 +92,7 @@ const AdminPage = () => {
 
       if (response.ok) {
         const result = await response.json();
-        if (Array.isArray(result.data)) {
-          setSuppliers(result.data);
-        } else {
-          setSuppliers([]);
-        }
+        setSuppliers(Array.isArray(result.data) ? result.data : []);
       } else {
         throw new Error("Failed to fetch suppliers");
       }
@@ -112,7 +101,6 @@ const AdminPage = () => {
     }
   };
 
-  // Fetch existing inventory items from the API
   const fetchInventoryItems = async () => {
     try {
       const token = localStorage.getItem("token");
@@ -125,11 +113,7 @@ const AdminPage = () => {
 
       if (response.ok) {
         const result = await response.json();
-        if (Array.isArray(result.data)) {
-          setInventoryItems(result.data);
-        } else {
-          setInventoryItems([]);
-        }
+        setInventoryItems(Array.isArray(result.data) ? result.data : []);
       } else {
         throw new Error("Failed to fetch inventory items");
       }
@@ -138,25 +122,26 @@ const AdminPage = () => {
     }
   };
 
-  // Add a new category
   const handleAddCategory = async () => {
     const userId = localStorage.getItem("userId");
     const token = localStorage.getItem("token");
-    const requestBody = {
-      name: newCategory,
-      quantity: newCategoryQuantity,
-      user_id: userId,
-    };
+
+    const requestBody = new FormData();
+    requestBody.append("name", newCategory);
+    requestBody.append("quantity", newCategoryQuantity);
+    requestBody.append("user_id", userId);
+    if (newCategoryImage) {
+      requestBody.append("image", newCategoryImage);
+    }
 
     try {
       const response = await fetch(`${BASE_URL}/category/store`, {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
           Accept: "application/json",
         },
-        body: JSON.stringify(requestBody),
+        body: requestBody,
       });
 
       if (!response.ok) {
@@ -167,13 +152,48 @@ const AdminPage = () => {
       }
 
       setNewCategory("");
+      setNewCategoryImage(null);
       fetchCategories();
     } catch (error) {
       setError("Failed to create category. Please try again.");
     }
   };
 
-  // Add a new dish
+  const handleUpdateCategory = async (categoryId) => {
+    const token = localStorage.getItem("token");
+    const requestBody = new FormData();
+
+    requestBody.append("name", updatedCategoryName);
+    if (updatedCategoryImage) {
+      requestBody.append("image", updatedCategoryImage); // Include new image
+    }
+
+    try {
+      const response = await fetch(
+        `${BASE_URL}/category/update/${categoryId}`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          body: requestBody,
+        }
+      );
+
+      if (!response.ok) {
+        const errorResponse = await response.json();
+        throw new Error(`Failed to update category: ${errorResponse.message}`);
+      }
+
+      fetchCategories(); // Refresh categories to reflect changes
+      setUpdatedCategoryName(""); // Clear input after update
+      setUpdatedCategoryImage(null); // Reset image after update
+      setSelectedCategory(null); // Clear selected category
+    } catch (error) {
+      setError(error.message);
+    }
+  };
+
   const handleAddDish = async () => {
     const { name, categoryId, quantity, price } = newDish;
 
@@ -216,7 +236,6 @@ const AdminPage = () => {
     }
   };
 
-  // Add a new supplier
   const handleAddSupplier = async () => {
     const token = localStorage.getItem("token");
     const userId = localStorage.getItem("userId");
@@ -254,15 +273,9 @@ const AdminPage = () => {
     }
   };
 
-  // Add a new inventory item
   const handleAddInventory = async () => {
-    console.log("Add Inventory Button Clicked");
-
     const token = localStorage.getItem("token");
     const userId = localStorage.getItem("userId");
-
-    console.log("New Inventory Data: ", newInventory);
-    console.log("Selected Supplier:", selectedSupplier); // Ensure this has the right structure
 
     if (
       !newInventory.name.trim() ||
@@ -270,7 +283,6 @@ const AdminPage = () => {
       !newInventory.expiry ||
       !selectedSupplier
     ) {
-      console.log("Validation failed: missing required fields.");
       setError(
         "Inventory name, quantity, expiry date, and supplier must be specified."
       );
@@ -296,45 +308,33 @@ const AdminPage = () => {
       });
 
       const responseData = await response.json();
-      console.log("API Response:", responseData);
 
       if (response.ok) {
         const inventoryId =
           responseData.id || responseData.data?.id || responseData.inventoryId;
-        console.log("Inventory ID:", inventoryId);
 
         if (!inventoryId) {
           throw new Error("Inventory ID is not returned");
         }
 
-        // Ensure the selected supplier value is correct
-        const supplierId = selectedSupplier.value; // Ensure this has the right format
-        console.log("Attaching Supplier ID:", supplierId);
-
-        // Attach the supplier to the newly created inventory
+        const supplierId = selectedSupplier.value;
         await attachSupplierToInventory(inventoryId, supplierId);
-
-        fetchInventoryItems(); // Refresh inventory items after successful addition
+        fetchInventoryItems();
         setNewInventory({ name: "", quantity: 1, expiry: "" });
-        setSelectedSupplier(null); // Reset selected supplier
+        setSelectedSupplier(null);
       } else {
         const responseText = await response.text();
         throw new Error(`Failed to create inventory item: ${responseText}`);
       }
     } catch (error) {
-      console.error("Error in adding inventory or attaching supplier:", error);
       setError(
         "Could not add inventory item and attach supplier, please try again."
       );
     }
   };
 
-  // Function to attach supplier to inventory
   const attachSupplierToInventory = async (inventoryId, supplierId) => {
     const token = localStorage.getItem("token");
-
-    // Ensure supplierId is logged for debugging
-    console.log("Attaching Supplier ID:", supplierId);
 
     try {
       const response = await fetch(
@@ -346,32 +346,24 @@ const AdminPage = () => {
             Authorization: `Bearer ${token}`,
             Accept: "application/json",
           },
-          body: JSON.stringify({ supplier_ids: [supplierId] }), // Adjust this based on API requirements
+          body: JSON.stringify({ supplier_ids: [supplierId] }),
         }
       );
 
       if (!response.ok) {
         const errorText = await response.text();
-        console.error("Failed to attach supplier:", errorText); // Log error response
         throw new Error(`Failed to attach supplier: ${errorText}`);
       }
-
-      console.log("Supplier attached successfully!");
     } catch (error) {
-      console.error("Error attaching supplier to inventory:", error);
       throw error; // Rethrow to handle further up in the call chain
     }
   };
 
-  // Function to delete inventory item
   const handleDeleteInventory = async (id) => {
     try {
-      // First, get supplier IDs associated with the inventory to detach
       const supplierIds = await getSupplierIdsForInventory(id);
       if (supplierIds.length > 0) {
-        await detachSupplierFromInventory(id, supplierIds); // Detach suppliers if any exist
-      } else {
-        console.warn("No Supplier IDs found for detachment.");
+        await detachSupplierFromInventory(id, supplierIds);
       }
 
       const token = localStorage.getItem("token");
@@ -384,22 +376,19 @@ const AdminPage = () => {
       });
 
       if (response.ok) {
-        fetchInventoryItems(); // Refresh inventory after deletion
+        fetchInventoryItems();
       } else {
         throw new Error("Failed to delete inventory item");
       }
     } catch (error) {
       setError("Could not delete inventory item, please try again.");
-      console.error("Error when deleting inventory:", error);
     }
   };
 
-  // Function to detach supplier from inventory
   const detachSupplierFromInventory = async (inventoryId, supplierIds) => {
     const token = localStorage.getItem("token");
 
     if (!supplierIds || supplierIds.length === 0) {
-      console.warn("No Supplier IDs provided for detachment.");
       return; // Exit if no supplier IDs are available
     }
 
@@ -425,16 +414,11 @@ const AdminPage = () => {
           `Failed to detach supplier from inventory: ${errorText}`
         );
       }
-
-      console.log("Suppliers detached successfully!");
     } catch (error) {
       setError("Could not detach supplier from inventory, please try again.");
-      console.error("Error in detaching suppliers from inventory:", error);
     }
   };
 
-  // Function to get supplier IDs for a specific inventory
-  // Function to get supplier IDs for a specific inventory item
   const getSupplierIdsForInventory = async (inventoryId) => {
     const token = localStorage.getItem("token");
 
@@ -452,23 +436,12 @@ const AdminPage = () => {
 
       if (response.ok) {
         const data = await response.json();
-
-        // Check the structure of your data
-        if (data && data.data && Array.isArray(data.data)) {
-          // Assuming each entry contains a supplier object with an id
-          return data.data.map((supplier) => supplier.id); // Ensure this matches your API's response structure
-        } else {
-          console.warn("No suppliers returned in response data:", data);
-          return []; // Return empty if the expected structure is not found
-        }
+        return data?.data?.map((supplier) => supplier.id) || [];
       } else {
-        const errorText = await response.text();
-        console.error("Failed to fetch supplier IDs:", errorText);
-        return []; // Log error and return empty array on failed response
+        return [];
       }
     } catch (error) {
-      console.error("Error fetching supplier IDs:", error);
-      return []; // Return empty array on error catching
+      return [];
     }
   };
 
@@ -546,6 +519,15 @@ const AdminPage = () => {
               {categories.map((category) => (
                 <li key={category.id}>
                   {category.name}
+                  <button
+                    onClick={() => {
+                      setSelectedCategory(category);
+                      setUpdatedCategoryName(category.name); // Load existing category name
+                      setUpdatedCategoryImage(null); // Reset image on select
+                    }}
+                  >
+                    Edit
+                  </button>
                   <button onClick={() => handleDeleteCategory(category.id)}>
                     Delete
                   </button>
@@ -567,6 +549,35 @@ const AdminPage = () => {
               onChange={(e) => setNewCategoryQuantity(e.target.value)}
               placeholder="Quantity"
             />
+            <h4>Upload Image</h4>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => setNewCategoryImage(e.target.files[0])}
+            />
+
+            {selectedCategory && (
+              <div>
+                <h2>Update Category: {selectedCategory.name}</h2>
+                <input
+                  type="text"
+                  value={updatedCategoryName}
+                  onChange={(e) => setUpdatedCategoryName(e.target.value)}
+                  placeholder="Update Category Name"
+                />
+                <h4>Upload New Image</h4>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => setUpdatedCategoryImage(e.target.files[0])} // New image handling
+                />
+                <button
+                  onClick={() => handleUpdateCategory(selectedCategory.id)}
+                >
+                  Update Category
+                </button>
+              </div>
+            )}
             <button onClick={handleAddCategory}>Add Category</button>
           </section>
         );

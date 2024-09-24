@@ -25,10 +25,10 @@ const Categories = () => {
         }
 
         const responseData = await response.json();
-        setCategories(responseData.data);
+        console.log("Fetched categories:", responseData.data); // Log the fetched categories
 
-        // Set visibility to true after categories are fetched
-        setIsVisible(true);
+        setCategories(responseData.data);
+        setIsVisible(true); // Set visibility to true after categories are fetched
       } catch (error) {
         console.error("Error fetching categories:", error);
       }
@@ -46,25 +46,6 @@ const Categories = () => {
     setIsVisible(false); // Hide the grid when going back
   };
 
-  // Define images and descriptions for each category
-  const categoryDetails = {
-    pizza: {
-      image:
-        "https://www.allrecipes.com/thmb/0xH8n2D4cC97t7mcC7eT2SDZ0aE=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/6776_Pizza-Dough_ddmfs_2x1_1725-fdaa76496da045b3bdaadcec6d4c5398.jpg",
-      description: "In crust we trust! 🍕",
-    },
-    pasta: {
-      image:
-        "https://img.taste.com.au/Vbq1y6HE/taste/2019/07/easy-pasta-bake-151447-2.jpg",
-      description: "A world of flavors in every bite! 🍝",
-    },
-    burgers: {
-      image:
-        "https://luma-delikatessen.ch/cdn-cgi/image/w=3420,f=webp,q=80/https://storage.googleapis.com/luma-du-shop-production/original_images/LUMA-rezept-crispy-chicken-burger-007.jpg",
-      description: "our abc’s — always be cheesin’ 🍔",
-    },
-  };
-
   return (
     <div className="categories-container">
       {selectedCategoryId ? (
@@ -77,12 +58,10 @@ const Categories = () => {
           {categories.map((category) => (
             <Card
               key={category.id}
+              id={`category-${category.id}`} // Unique ID for accessibility
               onClick={() => handleSelectCategory(category.id)}
               title={category.name}
-              description={
-                categoryDetails[category.name.toLowerCase()].description
-              }
-              image={categoryDetails[category.name.toLowerCase()].image}
+              image={`http://127.0.0.1:8000/storage/${category.image}`} // Updated path for images
             />
           ))}
         </div>

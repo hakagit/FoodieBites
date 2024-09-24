@@ -55,7 +55,7 @@ h1 {
 
 h2 {
   font-size: 1.8rem; /* Increased font size */
-  color: #50c878;
+  color: #50c878; /* Match button color */
   margin-top: 30px; /* Increased top margin for spacing */
 }
 
@@ -102,7 +102,7 @@ button {
 }
 
 button:hover {
-  background-color: #45b56e; /* Darker red on hover */
+  background-color: #45b56e; /* Darker /* Hover color on button */
 }
 
 input[type="text"],
@@ -124,9 +124,11 @@ select:focus {
   border-color: #50c878; /* Highlight border on focus */
   outline: none; /* Remove default outline */
 }
+
 .supplier-select {
-  margin-bottom: 40px;
+  margin-bottom: 40px; /* Space below supplier select */
 }
+
 @media (max-width: 768px) {
   .admin-page {
     padding: 20px; /* Adjust padding for smaller screens */
@@ -134,5 +136,10 @@ select:focus {
 
   .navbar {
     flex-direction: column; /* Stack navbar buttons */
+  }
+
+  .navbar button {
+    width: 100%; /* Full width for navbar buttons on small screens */
+    margin-bottom: 10px; /* Space between buttons */
   }
 }

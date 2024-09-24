@@ -1,13 +1,21 @@
+body {
+  font-family: "Arial", sans-serif; /* Better font for readability */
+  background-color: #f4f4f4; /* Light background for contrast */
+  margin: 0;
+  padding: 0;
+}
+
 .categories-container {
   display: flex;
   flex-direction: column; /* Stack items vertically */
   align-items: center; /* Center the items */
+  padding: 20px; /* Add some padding to the container */
 }
 
 .categories-grid {
   display: flex; /* Use flexbox for layout */
   flex-wrap: wrap; /* Allow cards to wrap on smaller screens */
-  justify-content: space-between; /* Space out the items */
+  justify-content: space-around; /* Use space-around for better card distribution */
   width: 100%; /* Full width */
   max-width: 1200px; /* Optional: limit max width */
   margin-top: 20px; /* Space above the grid */
@@ -22,21 +30,48 @@
 }
 
 .card {
-  flex: 1; /* Allow cards to grow */
-  margin: 0 10px; /* Side margin for spacing */
+  flex: 0 1 300px; /* Allow cards to shrink but have a base width */
+  margin: 15px; /* Side margin for spacing */
   display: flex; /* Ensure card contents are flexible */
   flex-direction: column; /* Stack content inside the card */
   align-items: center; /* Center align content */
   text-align: center; /* Center text */
-  max-width: 500px; /* Optional: set a max width for each card */
-  width: 100%;
+  border: 1px solid #ddd; /* Subtle border for card */
+  border-radius: 8px; /* Rounded corners */
+  background-color: #fff; /* White background for card */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Adds shadow for depth */
+  transition: transform 0.3s ease; /* Add smooth scaling on hover */
+}
+
+.card:hover {
+  transform: scale(1.05); /* Slightly scale the card on hover */
+}
+
+.card img {
+  width: 100%; /* Responsive image width */
+  height: 200px; /* Fixed height for uniformity */
+  object-fit: cover; /* Ensures the image covers the defined height and width, cropping as necessary */
+  border-top-left-radius: 8px; /* Rounded corners on top */
+  border-top-right-radius: 8px; /* Rounded corners on top */
+}
+
+.card h2 {
+  font-size: 1.5rem;
+  color: #333; /* Darker text for visibility */
+  margin: 10px 0; /* Space around title */
+}
+
+.card p {
+  font-size: 1rem;
+  color: #666; /* Lighter color for description */
+  margin: 0 10px 20px; /* Margin around description */
 }
 
 /* Media Queries for Responsiveness */
 @media (max-width: 768px) {
   .categories-grid {
     justify-content: center; /* Center the cards on smaller screens */
-    flex-direction: column;
+    flex-direction: row; /* Keep cards in a row */
   }
 
   .card {
