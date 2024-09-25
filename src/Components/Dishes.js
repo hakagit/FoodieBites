@@ -30,7 +30,7 @@ const Dishes = ({ categoryId, onBack }) => {
         }
 
         const responseData = await response.json();
-        console.log("Fetched dishes data:", responseData); // Check the structure
+        console.log("API Response:", responseData); // Log the response to inspect the structure
         setDishes(responseData);
       } catch (error) {
         console.error("Error fetching dishes:", error);
