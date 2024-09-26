@@ -15,8 +15,15 @@ const AdminPage = () => {
   const [newDish, setNewDish] = useState({
     name: "",
     categoryId: "",
-    quantity: 1,
     price: "",
+    image: null,
+  });
+  const [updatedDish, setUpdatedDish] = useState({
+    id: null,
+    name: "",
+    categoryId: "",
+    price: "",
+    image: null,
   });
   const [newSupplier, setNewSupplier] = useState("");
   const [newInventory, setNewInventory] = useState({
@@ -26,6 +33,7 @@ const AdminPage = () => {
   });
   const [selectedSupplier, setSelectedSupplier] = useState(null);
   const [error, setError] = useState("");
+  const [selectedDish, setSelectedDish] = useState(null);
   const [activeSection, setActiveSection] = useState("categories");
   const [selectedCategory, setSelectedCategory] = useState(null);
 
@@ -160,13 +168,27 @@ const AdminPage = () => {
   };
 
   const handleUpdateCategory = async (categoryId) => {
+    console.log("Updating category with ID:", categoryId);
     const token = localStorage.getItem("token");
+
     const requestBody = new FormData();
 
-    requestBody.append("name", updatedCategoryName);
-    if (updatedCategoryImage) {
-      requestBody.append("image", updatedCategoryImage); // Include new image
+    // Ensure valid data to send
+    if (!updatedCategoryName) {
+      setError("Category name is required.");
+      return;
     }
+
+    console.log("Updated Category Name:", updatedCategoryName);
+
+    requestBody.append("name", updatedCategoryName);
+    requestBody.append("user_id", localStorage.getItem("userId"));
+
+    if (updatedCategoryImage) {
+      requestBody.append("image", updatedCategoryImage);
+    }
+
+    console.log("Request Body:", Array.from(requestBody.entries()));
 
     try {
       const response = await fetch(
@@ -175,27 +197,33 @@ const AdminPage = () => {
           method: "POST",
           headers: {
             Authorization: `Bearer ${token}`,
+            Accept: "application/json",
           },
           body: requestBody,
         }
       );
 
-      if (!response.ok) {
-        const errorResponse = await response.json();
-        throw new Error(`Failed to update category: ${errorResponse.message}`);
-      }
+      const responseText = await response.text();
+      console.log("Response status:", response.status);
+      console.log("Response text:", responseText);
 
-      fetchCategories(); // Refresh categories to reflect changes
-      setUpdatedCategoryName(""); // Clear input after update
-      setUpdatedCategoryImage(null); // Reset image after update
-      setSelectedCategory(null); // Clear selected category
+      if (response.ok) {
+        const responseData = JSON.parse(responseText);
+        console.log("Response data:", responseData);
+        setUpdatedCategoryName("");
+        setUpdatedCategoryImage(null);
+        fetchCategories(); // Refresh categories after update
+      } else {
+        throw new Error(`Failed to update category: ${responseText}`);
+      }
     } catch (error) {
+      console.error("Error while updating category:", error);
       setError(error.message);
     }
   };
 
   const handleAddDish = async () => {
-    const { name, categoryId, quantity, price } = newDish;
+    const { name, categoryId, price, image } = newDish;
 
     if (!name.trim() || !categoryId || !price) {
       setError("Dish name, category, and price must be specified.");
@@ -205,28 +233,28 @@ const AdminPage = () => {
     const token = localStorage.getItem("token");
     const userId = localStorage.getItem("userId");
 
-    const requestBody = {
-      name,
-      category_id: categoryId,
-      quantity,
-      price,
-      user_id: userId,
-    };
+    const requestBody = new FormData();
+    requestBody.append("name", name);
+    requestBody.append("category_id", categoryId);
+    requestBody.append("price", price);
+    requestBody.append("user_id", userId);
+    if (image) {
+      requestBody.append("image", image);
+    }
 
     try {
       const response = await fetch(`${BASE_URL}/dish/store`, {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
           Accept: "application/json",
         },
-        body: JSON.stringify(requestBody),
+        body: requestBody,
       });
 
       if (response.ok) {
         fetchDishes();
-        setNewDish({ name: "", categoryId: "", quantity: 1, price: "" });
+        setNewDish({ name: "", categoryId: "", price: "", image: null });
       } else {
         const responseText = await response.text();
         throw new Error(`Failed to create dish: ${responseText}`);
@@ -234,6 +262,67 @@ const AdminPage = () => {
     } catch (error) {
       setError("Could not add dish, please try again.");
     }
+  };
+
+  const handleUpdateDish = async () => {
+    const { name, categoryId, price, image } = updatedDish;
+
+    if (!name || !categoryId || !price) {
+      setError("Dish name, category, and price are required.");
+      return;
+    }
+
+    const token = localStorage.getItem("token");
+
+    const requestBody = new FormData();
+    requestBody.append("name", name);
+    requestBody.append("category_id", categoryId);
+    requestBody.append("price", price);
+
+    if (image) {
+      requestBody.append("image", image);
+    }
+
+    try {
+      const response = await fetch(
+        `${BASE_URL}/dish/update/${updatedDish.id}`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: "application/json",
+          },
+          body: requestBody,
+        }
+      );
+
+      if (response.ok) {
+        setUpdatedDish({
+          id: null,
+          name: "",
+          categoryId: "",
+          price: "",
+          image: null,
+        });
+        fetchDishes(); // Refresh dish list after updating
+      } else {
+        throw new Error("Failed to update dish");
+      }
+    } catch (error) {
+      console.error("Error updating dish:", error);
+      setError("Could not update dish, please try again.");
+    }
+  };
+
+  const handleEditDish = (dish) => {
+    setSelectedDish(dish);
+    setUpdatedDish({
+      id: dish.id,
+      name: dish.name,
+      categoryId: dish.category_id,
+      price: dish.price,
+      image: null,
+    });
   };
 
   const handleAddSupplier = async () => {
@@ -519,18 +608,20 @@ const AdminPage = () => {
               {categories.map((category) => (
                 <li key={category.id}>
                   {category.name}
-                  <button
-                    onClick={() => {
-                      setSelectedCategory(category);
-                      setUpdatedCategoryName(category.name); // Load existing category name
-                      setUpdatedCategoryImage(null); // Reset image on select
-                    }}
-                  >
-                    Edit
-                  </button>
-                  <button onClick={() => handleDeleteCategory(category.id)}>
-                    Delete
-                  </button>
+                  <div className="button-group">
+                    <button
+                      onClick={() => {
+                        setSelectedCategory(category);
+                        setUpdatedCategoryName(category.name); // Load existing category name
+                        setUpdatedCategoryImage(null); // Reset image on select
+                      }}
+                    >
+                      Edit
+                    </button>
+                    <button onClick={() => handleDeleteCategory(category.id)}>
+                      Delete
+                    </button>
+                  </div>
                 </li>
               ))}
             </ul>
@@ -555,7 +646,6 @@ const AdminPage = () => {
               accept="image/*"
               onChange={(e) => setNewCategoryImage(e.target.files[0])}
             />
-
             {selectedCategory && (
               <div>
                 <h2>Update Category: {selectedCategory.name}</h2>
@@ -585,58 +675,48 @@ const AdminPage = () => {
         return (
           <section className="dish-section">
             <h2>Manage Dishes</h2>
-            <h3>Existing Dishes</h3>
-            <ul>
-              {dishes.map((dish) => (
-                <li key={dish.id}>
-                  {dish.name} (Category: {dish.category.name}){" "}
-                  <button onClick={() => handleDeleteDish(dish.id)}>
-                    Delete
-                  </button>
-                </li>
-              ))}
-            </ul>
-            <h3>Add a new Dish</h3>
-            <input
-              type="text"
-              value={newDish.name}
-              placeholder="Dish Name"
-              onChange={(e) => setNewDish({ ...newDish, name: e.target.value })}
-            />
+
+            {/* Dropdown to select a category */}
+            <h3>Select Category to Filter Dishes</h3>
             <select
-              value={newDish.categoryId}
-              onChange={(e) =>
-                setNewDish({ ...newDish, categoryId: e.target.value })
-              }
+              value={selectedCategory || ""}
+              onChange={(e) => {
+                setSelectedCategory(e.target.value);
+              }}
             >
-              <option value="">Select Category</option>
+              <option value="">All Categories</option>
               {categories.map((category) => (
                 <option key={category.id} value={category.id}>
                   {category.name}
                 </option>
               ))}
             </select>
-            <h4>Enter Quantity</h4>
-            <input
-              type="number"
-              value={newDish.quantity}
-              min="1"
-              onChange={(e) =>
-                setNewDish({ ...newDish, quantity: e.target.value })
-              }
-              placeholder="Quantity"
-            />
-            <h4>Enter Price</h4>
-            <input
-              type="number"
-              value={newDish.price}
-              min="0"
-              onChange={(e) =>
-                setNewDish({ ...newDish, price: e.target.value })
-              }
-              placeholder="Price"
-            />
-            <button onClick={handleAddDish}>Add Dish</button>
+
+            <h3>Existing Dishes</h3>
+            <ul>
+              {dishes
+                .filter((dish) => {
+                  return (
+                    !selectedCategory ||
+                    dish.category_id === parseInt(selectedCategory)
+                  );
+                })
+                .map((dish) => (
+                  <li key={dish.id}>
+                    {dish.name} (Category: {dish.category.name})
+                    <div className="button-group">
+                      {" "}
+                      {/* This div groups the buttons */}
+                      <button onClick={() => handleEditDish(dish)}>Edit</button>
+                      <button onClick={() => handleDeleteDish(dish.id)}>
+                        Delete
+                      </button>
+                    </div>
+                  </li>
+                ))}
+            </ul>
+
+            {/* Remaining existing Dish Add section code here... */}
           </section>
         );
       case "suppliers":
